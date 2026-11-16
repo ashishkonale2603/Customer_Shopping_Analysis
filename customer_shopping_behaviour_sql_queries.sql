@@ -15,9 +15,16 @@ from customer
 where discount_applied= 'Yes' and purchase_amount >= (
 select avg(purchase_amount)
 from customer);
+
 -- Q3. Which are the top 5 products with the highest average review rating?
+select item_purchased,round(avg(review_rating),2) as Avg_review_rating
+from customer
+group by item_purchased
+order by avg(review_rating) desc
+limit 5;
 
 -- Q4. Compare the average Purchase Amounts between Standard and Express Shipping.
+
 
 -- Q5. Do subscribed customers spend more? Compare average spend and total revenue between subscribers and non-subscribers.
 
