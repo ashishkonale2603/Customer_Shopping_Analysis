@@ -45,7 +45,15 @@ limit 5;
 
 
 -- Q8. What are the top 3 most purchased products within each category? 
-
+with my_first_cte as (
+select category, item_purchased, count(customer_id) as number_of_sales
+from customer
+group by category,item_purchased
+order by count(customer_id)
+limit 3
+)
+select *
+from my_first_cte;
 
 -- Q9. Are customers who are repeat buyers (more than 5 previous purchases) also likely to subscribe?
 select subscription_status,count(customer_id)
@@ -57,3 +65,35 @@ group by subscription_status;
 select age_group,sum(purchase_amount) as revenue
 from customer
 group by age_group;
+
+-- Find all customers (customer_id, category, purchase_amount) whose purchase amount is strictly greater than the average purchase amount for that specific product's category.
+select customer_id, category, purchase_amount
+from customer c1
+where purchase_amount > (select avg(purchase_amount)
+						 from customer c2
+                         where c1.category=c2.category
+                         );
+                         
+-- List all purchases (customer_id, item_purchased, category, review_rating) that belong to categories generating more than $50,000 in total revenue.
+select customer_id, item_purchased, category, review_rating
+from customer c1
+where 50000 < (select sum(purchase_amount)
+			   from customer c2
+			   where c1.category = c2.category);
+					   
+-- Retrieve the season, customer_id, item_purchased, and purchase_amount for the single highest purchase amount recorded in each season.
+select season, customer_id, item_purchased, purchase_amount
+from customer c1
+where purchase_amount = (select max(purchase_amount)
+						 from customer c2
+                         where c1.season=c2.season
+                         );
+
+
+
+
+
+
+
+
+
