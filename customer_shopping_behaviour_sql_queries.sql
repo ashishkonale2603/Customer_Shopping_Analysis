@@ -66,6 +66,9 @@ select age_group,sum(purchase_amount) as revenue
 from customer
 group by age_group;
 
+
+-- Part 1: Subquery Practice Questions
+
 -- Find all customers (customer_id, category, purchase_amount) whose purchase amount is strictly greater than the average purchase amount for that specific product's category.
 select customer_id, category, purchase_amount
 from customer c1
@@ -88,8 +91,23 @@ where purchase_amount = (select max(purchase_amount)
 						 from customer c2
                          where c1.season=c2.season
                          );
+                         
+-- Find all customers classified as 'New' (previous_purchases = 1) whose purchase_amount is higher than the average purchase_amount of 'Loyal' customers (previous_purchases > 10).
+select customer_id, item_purchased, purchase_amount
+from customer 
+where previous_purchases=10 and purchase_amount > (select avg(purchase_amount)
+												   from customer 
+                                                   where previous_purchases>10);
 
+-- Identify each item_purchased whose average review_rating is lower than the overall average review_rating across the entire customer table.
+select item_purchased, review_rating
+from customer
+where review_rating < (select avg(review_rating)
+					   from customer);
 
+-- Part 2: Joins & Self-Join Practice Questions
+
+-- Join the customer table with a subquery that calculates the average purchase_amount and total customer count per location. Display customer_id, location, purchase_amount, location_avg_spend, and the difference (purchase_amount - location_avg_spend).
 
 
 
