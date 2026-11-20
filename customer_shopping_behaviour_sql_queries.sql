@@ -109,7 +109,22 @@ where review_rating < (select avg(review_rating)
 
 -- Join the customer table with a subquery that calculates the average purchase_amount and total customer count per location. Display customer_id, location, purchase_amount, location_avg_spend, and the difference (purchase_amount - location_avg_spend).
 
-
+SELECT 
+    c.customer_id,
+    c.location,
+    c.purchase_amount,
+    loc_stats.location_avg_spend,
+    ROUND(c.purchase_amount - loc_stats.location_avg_spend, 2) AS spend_difference
+FROM customer c
+INNER JOIN (
+    SELECT 
+        location, 
+        ROUND(AVG(purchase_amount), 2) AS location_avg_spend,
+        COUNT(customer_id) AS total_customers
+    FROM customer
+    GROUP BY location
+) loc_stats
+    ON c.location = loc_stats.location;
 
 
 
