@@ -125,6 +125,8 @@ INNER JOIN (
     GROUP BY location
 ) loc_stats
     ON c.location = loc_stats.location;
+    
+    
 
 
 
